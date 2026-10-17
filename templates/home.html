@@ -1,0 +1,480 @@
+
+{% extends "base.html" %}
+
+{% block body %}
+
+<style>
+    .home-page {
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #172033;
+        background: #f8faff;
+        min-height: 85vh;
+        overflow: hidden;
+    }
+
+    .home-hero {
+        min-height: 570px;
+        padding: 70px 8%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 50px;
+        background:
+            radial-gradient(circle at 85% 25%, #dbeafe 0, transparent 30%),
+            linear-gradient(135deg, #eef2ff, #faf5ff, #f0f9ff);
+    }
+
+    .hero-content {
+        flex: 1;
+        max-width: 590px;
+        animation: slideIn 0.8s ease both;
+    }
+
+    .hero-tag {
+        display: inline-block;
+        padding: 9px 15px;
+        border-radius: 30px;
+        background: #e0e7ff;
+        color: #4338ca;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 24px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(38px, 5vw, 62px);
+        line-height: 1.12;
+        letter-spacing: -2px;
+        color: #111827;
+        margin: 0 0 22px;
+    }
+
+    .hero-content h1 span {
+        color: #4f46e5;
+    }
+
+    .hero-description {
+        color: #64748b;
+        font-size: 17px;
+        line-height: 1.8;
+        max-width: 500px;
+        margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .home-btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 23px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.25s ease;
+    }
+
+    .primary-btn {
+        background: #4f46e5;
+        color: white;
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .primary-btn:hover {
+        background: #4338ca;
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .secondary-btn {
+        background: white;
+        border: 1px solid #dbe1ea;
+        color: #334155;
+    }
+
+    .secondary-btn:hover {
+        border-color: #818cf8;
+        color: #4f46e5;
+        transform: translateY(-3px);
+    }
+
+    .hero-note-area {
+        flex: 1;
+        max-width: 450px;
+        position: relative;
+        min-height: 360px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: floatIn 1s ease both;
+    }
+
+    .note-stack {
+        width: 310px;
+        height: 300px;
+        position: relative;
+    }
+
+    .note-card {
+        position: absolute;
+        width: 255px;
+        min-height: 205px;
+        border-radius: 18px;
+        padding: 25px;
+        box-sizing: border-box;
+        box-shadow: 0 18px 45px rgba(30, 41, 59, 0.12);
+        transition: transform 0.3s ease;
+    }
+
+    .note-card h3 {
+        font-size: 19px;
+        margin: 12px 0;
+        color: #1e293b;
+    }
+
+    .note-card p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .note-icon {
+        width: 43px;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 23px;
+    }
+
+    .note-one {
+        background: #fff7cc;
+        top: 0;
+        left: 0;
+        transform: rotate(-8deg);
+    }
+
+    .note-two {
+        background: white;
+        top: 42px;
+        left: 75px;
+        transform: rotate(5deg);
+    }
+
+    .note-three {
+        background: #dcfce7;
+        top: 125px;
+        left: 15px;
+        transform: rotate(-3deg);
+    }
+
+    .note-one:hover,
+    .note-two:hover,
+    .note-three:hover {
+        z-index: 5;
+        transform: rotate(0deg) translateY(-8px) scale(1.04);
+    }
+
+    .features-section {
+        padding: 75px 8%;
+        background: white;
+    }
+
+    .section-heading {
+        text-align: center;
+        max-width: 620px;
+        margin: 0 auto 45px;
+    }
+
+    .section-heading h2 {
+        font-size: clamp(28px, 3vw, 38px);
+        color: #111827;
+        margin: 0 0 13px;
+    }
+
+    .section-heading p {
+        color: #64748b;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 25px;
+        max-width: 1150px;
+        margin: auto;
+    }
+
+    .feature-card {
+        padding: 30px;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        background: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 15px 35px rgba(30, 41, 59, 0.08);
+    }
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .icon-purple {
+        background: #ede9fe;
+    }
+
+    .icon-blue {
+        background: #dbeafe;
+    }
+
+    .icon-green {
+        background: #dcfce7;
+    }
+
+    .feature-card h3 {
+        font-size: 18px;
+        color: #1e293b;
+        margin: 0 0 12px;
+    }
+
+    .feature-card p {
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    .home-footer {
+        padding: 24px;
+        background: #f8faff;
+        border-top: 1px solid #e5e7eb;
+        text-align: center;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-25px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes floatIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 850px) {
+        .home-hero {
+            padding: 55px 6%;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .hero-description {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            justify-content: center;
+        }
+
+        .hero-note-area {
+            width: 100%;
+        }
+
+        .features-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 560px) {
+        .home-hero {
+            padding: 45px 20px;
+        }
+
+        .hero-content h1 {
+            letter-spacing: -1px;
+        }
+
+        .hero-description {
+            font-size: 15px;
+        }
+
+        .note-stack {
+            transform: scale(0.85);
+        }
+
+        .features-section {
+            padding: 55px 20px;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .feature-card {
+            padding: 25px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-page *,
+        .home-page *::before,
+        .home-page *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+</style>
+
+<div class="home-page">
+
+    <!-- Hero section -->
+    <section class="home-hero">
+
+        <div class="hero-content">
+
+            <span class="hero-tag">✦ YOUR PERSONAL NOTE SPACE</span>
+
+            <h1>
+                Your thoughts,<br>
+                your space,<br>
+                <span>your notes.</span>
+            </h1>
+
+            <p class="hero-description">
+                Capture ideas, organize your thoughts, and keep important
+                information in one place. Make every thought count with
+                your personal Notes Management System.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="{{ url_for('register') }}"
+                   class="home-btn primary-btn">
+                    Get Started <span>→</span>
+                </a>
+
+                <a href="{{ url_for('login') }}"
+                   class="home-btn secondary-btn">
+                    Login to Your Account
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Decorative note illustration -->
+        <div class="hero-note-area">
+            <div class="note-stack">
+
+                <div class="note-card note-one">
+                    <div class="note-icon" style="background:#fde68a;">
+                        💡
+                    </div>
+                    <h3>New ideas</h3>
+                    <p>Every great project begins with a single idea.</p>
+                </div>
+
+                <div class="note-card note-two">
+                    <div class="note-icon" style="background:#dbeafe;">
+                        📝
+                    </div>
+                    <h3>My daily notes</h3>
+                    <p>Write down your thoughts and keep them organized.</p>
+                </div>
+
+                <div class="note-card note-three">
+                    <div class="note-icon" style="background:#bbf7d0;">
+                        ✓
+                    </div>
+                    <h3>Stay organized</h3>
+                    <p>Keep track of the things that matter to you.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Features section -->
+    <section class="features-section">
+
+        <div class="section-heading">
+            <h2>Everything starts with a note</h2>
+            <p>
+                A simple and convenient place to capture, manage,
+                and revisit your important information.
+            </p>
+        </div>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+                <div class="feature-icon icon-purple">✍️</div>
+                <h3>Create Notes</h3>
+                <p>
+                    Quickly write down your ideas, reminders,
+                    plans, and important information.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-blue">📚</div>
+                <h3>Manage Your Notes</h3>
+                <p>
+                    Keep your notes organized and easily
+                    access the information you have saved.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-green">🔄</div>
+                <h3>Edit Anytime</h3>
+                <p>
+                    Update existing notes whenever your ideas
+                    change or new information becomes available.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="home-footer">
+        Notes Management System · Your thoughts, organized.
+    </footer>
+
+</div>
+
+{% endblock %}

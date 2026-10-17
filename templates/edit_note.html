@@ -1,0 +1,327 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Note{% endblock %}
+
+{% block body %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .edit-note-page {
+        min-height: calc(100vh - 80px);
+        background: #f4f6fc;
+        padding: 28px 20px 40px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #172b4d;
+    }
+
+    /* Same centered width as Create Note */
+    .edit-note-container {
+        width: 100%;
+        max-width: 840px;
+        margin: 0 auto;
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        color: #7b8ba8;
+        margin-bottom: 18px;
+    }
+
+    .breadcrumb a {
+        color: #6045ff;
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .page-heading {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: #172b4d;
+    }
+
+    .page-description {
+        color: #71819f;
+        font-size: 15px;
+        line-height: 1.5;
+        margin: 0 0 22px;
+    }
+
+    .edit-note-card {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e2e8f5;
+        border-radius: 20px;
+        padding: 26px;
+        box-shadow: 0 12px 35px rgba(31, 45, 80, 0.06);
+    }
+
+    .card-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+
+    .note-icon {
+        width: 50px;
+        height: 50px;
+        background: #eeebff;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        flex-shrink: 0;
+    }
+
+    .card-heading h2 {
+        font-size: 20px;
+        margin: 0 0 6px;
+        color: #172b4d;
+    }
+
+    .card-heading p {
+        color: #8795ae;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 700;
+        color: #253858;
+        margin-bottom: 9px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #dce3f2;
+        border-radius: 12px;
+        background: #fbfcff;
+        color: #253858;
+        font-family: inherit;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: #7650f5;
+        box-shadow: 0 0 0 4px rgba(118, 80, 245, 0.10);
+        background: #ffffff;
+    }
+
+    .title-input {
+        height: 50px;
+    }
+
+    .content-input {
+        height: 160px;
+        min-height: 160px;
+        resize: vertical;
+        line-height: 1.7;
+    }
+
+    .field-help {
+        font-size: 12px;
+        color: #8b9ab3;
+        margin-top: 7px;
+    }
+
+    .form-footer {
+        border-top: 1px solid #edf0f7;
+        padding-top: 17px;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .workspace-label {
+        color: #8795ae;
+        font-size: 13px;
+    }
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6750f5, #8139ec);
+        border: none;
+        color: white;
+        box-shadow: 0 5px 14px rgba(103, 80, 245, 0.20);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(103, 80, 245, 0.25);
+    }
+
+    .btn-secondary {
+        background: #ffffff;
+        border: 1px solid #dce3f2;
+        color: #40516e;
+    }
+
+    .btn-secondary:hover {
+        background: #f5f6fb;
+        border-color: #c4cde0;
+    }
+
+    /* Fit the entire form on smaller screens */
+    @media (max-width: 600px) {
+        .edit-note-page {
+            padding: 20px 12px 30px;
+        }
+
+        .page-heading {
+            font-size: 24px;
+        }
+
+        .edit-note-card {
+            padding: 18px;
+            border-radius: 15px;
+        }
+
+        .content-input {
+            height: 140px;
+            min-height: 140px;
+        }
+
+        .form-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .form-actions {
+            width: 100%;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+            padding: 12px 10px;
+        }
+    }
+</style>
+
+<div class="edit-note-page">
+    <div class="edit-note-container">
+
+        <div class="breadcrumb">
+            <a href="{{ url_for('dashboard', token=token) }}">
+                🏠 Dashboard
+            </a>
+            &nbsp; / &nbsp;
+            <span>📝 Edit Note</span>
+        </div>
+
+        <h1 class="page-heading">Edit your note ✨</h1>
+
+        <p class="page-description">
+            Update your ideas, refine your thoughts, and keep your notes organized.
+        </p>
+
+        <div class="edit-note-card">
+
+            <div class="card-heading">
+                <div class="note-icon">📝</div>
+                <div>
+                    <h2>Note details</h2>
+                    <p>Make your changes below and save your note.</p>
+                </div>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('edit_note', note_id=note[0], token=token) }}">
+
+                <div class="form-group">
+                    <label for="title">Note title</label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="form-control title-input"
+                        placeholder="e.g. Python learning roadmap"
+                        value="{{ note[1] }}"
+                        maxlength="200"
+                        required
+                    >
+
+                    <div class="field-help">
+                        Give your note a clear title to find it easily later.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Note content</label>
+
+                    <textarea
+                        id="content"
+                        name="content"
+                        class="form-control content-input"
+                        placeholder="Start writing your ideas, tasks, reminders..."
+                        required
+                    >{{ note[2] }}</textarea>
+
+                    <div class="field-help">
+                        Update your thoughts, tasks, reminders, or important information.
+                    </div>
+                </div>
+
+                <div class="form-footer">
+
+                    <div class="form-actions">
+                        <a href="{{ url_for('dashboard', token=token) }}"
+                           class="btn btn-secondary">
+                            Cancel
+                        </a>
+
+                        <button type="submit" class="btn btn-primary">
+                            💾 Update Note
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

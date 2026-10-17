@@ -1,0 +1,193 @@
+
+{% extends 'base.html' %}
+
+{% block title %}View Note{% endblock %}
+
+{% block body %}
+
+<style>
+    .view-note-container {
+        max-width: 950px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: #172b4d;
+    }
+
+    .breadcrumb {
+        margin-bottom: 24px;
+        color: #7b8ba8;
+        font-size: 14px;
+    }
+
+    .breadcrumb a {
+        color: #6842f5;
+        text-decoration: none;
+    }
+
+    .view-note-container h1 {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .page-description {
+        color: #7787a5;
+        margin-bottom: 25px;
+    }
+
+    .note-card {
+        background: #ffffff;
+        border: 1px solid #e0e7f4;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 12px 35px rgba(32, 53, 94, 0.07);
+    }
+
+    .note-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 25px;
+    }
+
+    .note-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+        background: #ece8ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+    }
+
+    .note-heading h2 {
+        margin: 0;
+        font-size: 23px;
+        overflow-wrap: anywhere;
+    }
+
+    .note-label {
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #253957;
+    }
+
+    .note-content {
+        background: #f8faff;
+        border: 1px solid #e1e8f5;
+        border-radius: 12px;
+        padding: 22px;
+        min-height: 220px;
+        line-height: 1.8;
+        color: #445575;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .note-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #edf0f7;
+    }
+
+    .note-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .back-btn {
+        background: #ffffff;
+        border: 1px solid #dce4f2;
+        color: #344766;
+    }
+
+    .edit-btn {
+        background: linear-gradient(135deg, #7050f5, #8439ee);
+        color: #ffffff;
+        box-shadow: 0 5px 12px rgba(112, 80, 245, 0.2);
+    }
+
+    .note-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .back-btn:hover {
+        background: #f3f5fb;
+    }
+
+    .edit-btn:hover {
+        opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+        .note-card {
+            padding: 20px;
+        }
+
+        .view-note-container h1 {
+            font-size: 25px;
+        }
+    }
+</style>
+
+<div class="view-note-container">
+
+    <div class="breadcrumb">
+        <a href="{{ url_for('dashboard', token=token) }}">
+            🏠 Dashboard
+        </a>
+        / View Note
+    </div>
+
+    <h1>View your note 📖</h1>
+
+    <p class="page-description">
+        Read your saved thoughts, ideas, and reminders.
+    </p>
+
+    <div class="note-card">
+
+        <div class="note-heading">
+            <div class="note-icon">📝</div>
+
+            <div>
+                <h2>{{ note[1] }}</h2>
+                <p style="color: #8290aa; margin: 8px 0 0;">
+                    Your saved note
+                </p>
+            </div>
+        </div>
+
+        <div class="note-label">Note content</div>
+
+        <div class="note-content">{{ note[2] }}</div>
+
+        <div class="note-actions">
+
+            <a href="{{ url_for('dashboard', token=token) }}"
+               class="note-btn back-btn">
+                ← Back to Notes
+            </a>
+
+            <a href="{{ url_for('edit_note',
+                                note_id=note[0],
+                                token=token) }}"
+               class="note-btn edit-btn">
+                ✏️ Edit Note
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h2>Verify OTP</h2>
+
+    {% if msg %}
+        <p>{{ msg }}</p>
+    {% endif %}
+
+    <form method="POST"
+          action="{{ url_for('verifyOTP', token=request.view_args['token']) }}">
+        <label for="otp">OTP:</label>
+        <input type="text" id="otp" name="otp" required>
+        <br>
+        <button type="submit">Verify</button>
+    </form>
+{% endblock %}

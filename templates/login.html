@@ -1,0 +1,242 @@
+
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+
+<style>
+    .login-page {
+        min-height: 85vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 35px 16px;
+        background: linear-gradient(135deg, #eef2ff, #f5f3ff, #e0f2fe);
+        font-family: Arial, sans-serif;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 430px;
+        padding: 38px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 12px 40px rgba(31, 41, 55, 0.12);
+    }
+
+    .login-logo {
+        width: 55px;
+        height: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #4f46e5;
+        color: white;
+        font-size: 28px;
+        border-radius: 15px;
+        margin-bottom: 22px;
+    }
+
+    .login-card h2 {
+        font-size: 28px;
+        color: #111827;
+        margin: 0 0 10px;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 26px;
+    }
+
+    .login-card .form-group {
+        margin-bottom: 20px;
+    }
+
+    .login-card label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .login-card input {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        box-sizing: border-box;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .login-card input:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .password-box {
+        position: relative;
+    }
+
+    .password-box input {
+        padding-right: 65px;
+    }
+
+    .show-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #4f46e5;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .forgot-password {
+        text-align: right;
+        margin-top: -8px;
+        margin-bottom: 20px;
+        font-size: 13px;
+    }
+
+    .forgot-password a,
+    .login-register a {
+        color: #4f46e5;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .forgot-password a:hover,
+    .login-register a:hover {
+        text-decoration: underline;
+    }
+
+    .login-error {
+        background: #fef2f2;
+        color: #b91c1c;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 18px;
+        overflow-wrap: anywhere;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 9px;
+        background: #4f46e5;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .login-btn:hover {
+        background: #4338ca;
+    }
+
+    .login-register {
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 24px;
+    }
+
+    @media (max-width: 480px) {
+        .login-card {
+            padding: 27px 22px;
+        }
+    }
+</style>
+
+<div class="login-page">
+    <div class="login-card">
+
+        <div class="login-logo">✎</div>
+
+        <h2>Welcome back!</h2>
+
+        <p class="login-subtitle">
+            Sign in to access your notes and continue where you left off.
+        </p>
+
+        {% if msg %}
+            <div class="login-error">{{ msg }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <div class="form-group">
+                <label for="username">Email address</label>
+                <input
+                    type="email"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your email"
+                    autocomplete="username"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-box">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="toggleLoginPassword()">
+                        Show
+                    </button>
+                </div>
+            </div>
+
+            <div class="forgot-password">
+                <a href="{{ url_for('forgot_password') }}">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Sign In →
+            </button>
+
+        </form>
+
+        <p class="login-register">
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Create account</a>
+        </p>
+
+    </div>
+</div>
+
+<script>
+    function toggleLoginPassword() {
+        const password = document.getElementById("password");
+        const button = document.querySelector(".show-password");
+
+        if (password.type === "password") {
+            password.type = "text";
+            button.textContent = "Hide";
+        } else {
+            password.type = "password";
+            button.textContent = "Show";
+        }
+    }
+</script>
+
+{% endblock %}
