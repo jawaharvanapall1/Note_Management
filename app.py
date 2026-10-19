@@ -54,41 +54,62 @@ def generate_otp_token(email):
     )
     return otp, token
 
-# register route
-@app.route('/register', methods=['GET',"POST"])
+
+# Register route
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        session['username'] = request.form['username']
+        session['username'] = request.form['username'].strip()
         session['password'] = request.form['password']
-        session['email'] = request.form['email']
-        
-        if not checkUserStatus(session['email']) == True:
-            # generate otp
-            otp, token = generate_otp_token(session['email'])
-            print("DEBUG OTP:", otp)
-            session['register_otp_token'] = token
-            # otp send via email
+        session['email'] = request.form['email'].strip()
 
-            # print('------------Assume like this otp came \
-                #   via email:',otp) 
-            body = f"""
-                    Dear customer {session['username']},
-                    This mail is to vefiry your notes management app!!!
-                    Verification OTP is:{otp}.
-
-                    This OTP expires within 2 mins.
-                    Don't replay to this email.
-
-                    Best Regards
-                    Notes App. 
-                    """
-            emailSend(
-                to_email=session['email'],
-                subject = "Notes Management OTP Verification",
-                body = body
+        if checkUserStatus(username=session['email']):
+            return render_template(
+                'register.html',
+                msg="Username or email already exists"
             )
-            return redirect(url_for('verifyOTP', token=session['register_otp_token']))
-        return render_template('register.html', msg = "Username email already exist")
+
+        # Generate OTP and verification token
+        otp, token = generate_otp_token(session['email'])
+
+        # Save token in session
+        session['register_otp_token'] = token
+
+        # Prepare OTP email
+        body = f"""
+                Dear {session['username']},
+
+                Welcome to Notespace!
+
+                Your email verification OTP is: {otp}
+
+                This OTP expires within 2 minutes.
+                Please do not share this code with anyone.
+
+                Best regards,
+                Notespace Team
+                """
+
+        # Send OTP to email
+        email_sent = emailSend(
+            to_email=session['email'],
+            subject="Notespace - Email OTP Verification",
+            body=body
+        )
+
+        if email_sent:
+            return redirect(
+                url_for('verifyOTP', token=token)
+            )
+
+        # Clean up if email sending fails
+        session.pop('register_otp_token', None)
+
+        return render_template(
+            'register.html',
+            msg="Unable to send OTP email. Please check your email settings and try again."
+        )
+
     return render_template('register.html')
 
 # verifyOTP route
